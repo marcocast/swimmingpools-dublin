@@ -1,5 +1,5 @@
 # geoservices
-Skeleton project for building geoservices based back end applications 
+Base RESTful project for building geoservices applications 
 
 # Overview
 
