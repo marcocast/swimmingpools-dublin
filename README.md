@@ -1,4 +1,4 @@
-# geoservices-base
+# geoservices
 Skeleton project for building geoservices based back end applications 
 
 # Overview
