@@ -5,17 +5,16 @@ Skeleton project for building geoservices based back end applications
 
 # Requirements
 
+Clone this project locally.
+
 Create an Heroku application :
-_heroku create {heroku-app-name}_
+_Follow this instruction https://devcenter.heroku.com/articles/getting-started-with-java#deploy-the-app choose an app name {heroku-app-name}_
 
 Create an Backendless application :
 _singup here https://backendless.com and use the same Heroku app name {heroku-app-name}_
 
 Create an Stormpath application :
 _singup here https://stormpath.com and use the same Heroku app name {heroku-app-name}_
-
-Clone this project locally and attach it to Heroku : 
-_git remote add heroku git@heroku.com:{heroku-app-name}.git_
 
 # Get Started
 
