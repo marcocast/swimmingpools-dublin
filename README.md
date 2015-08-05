@@ -7,8 +7,8 @@ Skeleton project for building geoservices based back end applications
 
 Clone this project locally.
 
-Create an Heroku application :
-_Follow this instruction https://devcenter.heroku.com/articles/getting-started-with-java#deploy-the-app choose an app name {heroku-app-name}_
+Create a Java Heroku application :
+_https://devcenter.heroku.com/articles/deploying-java#deploy-your-application-to-heroku choose an app name {heroku-app-name}_
 
 Create an Backendless application :
 _singup here https://backendless.com and use the same Heroku app name {heroku-app-name}_
