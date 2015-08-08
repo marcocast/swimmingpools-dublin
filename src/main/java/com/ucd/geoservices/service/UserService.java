@@ -38,6 +38,10 @@ public class UserService {
 				.getUser(request.getSession().getAttribute("account"));
 	}
 
+	public void deleteUser(HttpServletRequest request) {
+		authManager.deleteUser(request.getSession().getAttribute("account"));
+	}
+
 	public void deleteTokens(HttpServletRequest request) {
 		authManager.deleteTokens(request.getSession().getAttribute("account"));
 

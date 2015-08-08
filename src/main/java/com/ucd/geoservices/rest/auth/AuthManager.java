@@ -18,4 +18,6 @@ public interface AuthManager {
 
 	public abstract User create(User user);
 
+	public abstract void deleteUser(Object accountObject);
+
 }

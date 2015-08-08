@@ -131,4 +131,9 @@ public class StormpathAuth implements AuthManager {
 			key.delete();
 		}
 	}
+
+	@Override
+	public void deleteUser(Object accountObject) {
+		((Account) accountObject).delete();
+	}
 }

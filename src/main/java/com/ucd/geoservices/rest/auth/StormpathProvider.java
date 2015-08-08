@@ -16,6 +16,7 @@ import com.stormpath.sdk.application.Applications;
 import com.stormpath.sdk.cache.Caches;
 import com.stormpath.sdk.client.Client;
 import com.stormpath.sdk.client.Clients;
+import com.ucd.geoservices.app.Main;
 
 @Getter
 @Component
@@ -54,7 +55,8 @@ public class StormpathProvider {
 
 		ApplicationList applications = client.getCurrentTenant()
 				.getApplications(
-						Applications.where(Applications.name().eqIgnoreCase(System.getProperty("appname"))));
+						Applications.where(Applications.name().eqIgnoreCase(
+								Main.APPNAME)));
 
 		this.application = applications.iterator().next();
 	}

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.aol.micro.server.auto.discovery.FilterConfiguration;
+import com.ucd.geoservices.app.Main;
 import com.ucd.geoservices.rest.auth.AuthManager;
 
 @Component
@@ -26,11 +27,12 @@ public class AuthorizationFilter implements Filter, FilterConfiguration {
 
 	@Override
 	public String[] getMapping() {
-		String appname = "/" + System.getProperty("appname");
-		return new String[] { appname +"/resources/locations/add/*",
-				appname +"/resources/locations/remove",
-				appname +"/resources/user/details",
-				appname +"/resources/user/logout" };
+		String appname = "/" + Main.APPNAME;
+		return new String[] { appname + "/resources/locations/add/*",
+				appname + "/resources/locations/remove",
+				appname + "/resources/user/details",
+				appname + "/resources/user/logout",
+				appname + "/resources/user/delete" };
 	}
 
 	@Override

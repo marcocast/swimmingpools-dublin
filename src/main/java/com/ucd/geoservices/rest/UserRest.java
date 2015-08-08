@@ -3,6 +3,7 @@ package com.ucd.geoservices.rest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -39,7 +40,7 @@ public class UserRest {
 		userService.create(user);
 		String refreshToken = userService.getRefreshToken(user.getEmail(),
 				user.getPassword());
-		response.setHeader("RefreshToken", refreshToken);
+		response.setHeader("refresh_token", refreshToken);
 		return accesstoken(refreshToken);
 	}
 
@@ -49,7 +50,7 @@ public class UserRest {
 	public Response login(@HeaderParam("authorization") String auth,
 			@Context HttpServletResponse response) {
 		String refreshToken = userService.getRefreshToken(auth);
-		response.setHeader("RefreshToken", refreshToken);
+		response.setHeader("refresh_token", refreshToken);
 		return accesstoken(refreshToken);
 	}
 
@@ -64,7 +65,8 @@ public class UserRest {
 	@GET
 	@Path("accesstoken")
 	@Produces("application/json")
-	public Response accesstoken(@HeaderParam("RefreshToken") String refreshToken) {
+	public Response accesstoken(
+			@HeaderParam("refresh_token") String refreshToken) {
 		return Response.ok(userService.getAccessToken(refreshToken)).build();
 	}
 
@@ -74,5 +76,13 @@ public class UserRest {
 	public Response userDetails(@Context HttpServletRequest request) {
 		User user = userService.getUser(request);
 		return Response.ok(JacksonUtil.serializeToJson(user)).build();
+	}
+
+	@DELETE
+	@Path("delete")
+	@Produces("application/json")
+	public Response deleteUser(@Context HttpServletRequest request) {
+		userService.deleteUser(request);
+		return Response.ok().build();
 	}
 }
