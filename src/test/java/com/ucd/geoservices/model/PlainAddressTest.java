@@ -27,19 +27,15 @@ public class PlainAddressTest {
 	public void testFullConstructor() {
 		PlainAddress plainAddress = PlainAddressFixture.wexfordStreet33();
 
-		assertThat(plainAddress.getFullAddressString(),
-				is("Ireland Dublin wexford 33"));
+		assertThat(plainAddress.getFullAddressString(), is("Ireland Dublin wexford 33"));
 
 	}
 
 	@Test
 	public void testJson() {
-		PlainAddress expectedPlainAddress = PlainAddressFixture
-				.wexfordStreet33();
+		PlainAddress expectedPlainAddress = PlainAddressFixture.wexfordStreet33();
 
-		PlainAddress actualPlainAddress = JacksonUtil.convertFromJson(
-				JacksonUtil.serializeToJson(expectedPlainAddress),
-				PlainAddress.class);
+		PlainAddress actualPlainAddress = JacksonUtil.convertFromJson(JacksonUtil.serializeToJson(expectedPlainAddress), PlainAddress.class);
 
 		assertThat(expectedPlainAddress, is(actualPlainAddress));
 

@@ -14,37 +14,28 @@ public class QueryBoundariesRequestTest {
 	public void testEmptyConstructor() {
 		QueryBoundariesRequest queryBoundariesRequest = new QueryBoundariesRequest();
 
-		assertThat(queryBoundariesRequest.getTopLeftCoordinates(),
-				is(nullValue()));
-		assertThat(queryBoundariesRequest.getBottomRightCoordinates(),
-				is(nullValue()));
+		assertThat(queryBoundariesRequest.getTopLeftCoordinates(), is(nullValue()));
+		assertThat(queryBoundariesRequest.getBottomRightCoordinates(), is(nullValue()));
 
 	}
 
 	@Test
 	public void testFullConstructor() {
-		QueryBoundariesRequest queryBoundariesRequest = new QueryBoundariesRequest(
-				new Coordinates(33, 66), new Coordinates(44, 88));
+		QueryBoundariesRequest queryBoundariesRequest = new QueryBoundariesRequest(new Coordinates(33, 66), new Coordinates(44, 88));
 
-		assertThat(queryBoundariesRequest.getTopLeftCoordinates(),
-				is(new Coordinates(33, 66)));
-		assertThat(queryBoundariesRequest.getBottomRightCoordinates(),
-				is(new Coordinates(44, 88)));
+		assertThat(queryBoundariesRequest.getTopLeftCoordinates(), is(new Coordinates(33, 66)));
+		assertThat(queryBoundariesRequest.getBottomRightCoordinates(), is(new Coordinates(44, 88)));
 
 	}
 
 	@Test
 	public void testJson() {
-		QueryBoundariesRequest expectedQueryBoundariesRequest = new QueryBoundariesRequest(
-				new Coordinates(33, 66), new Coordinates(44, 88));
+		QueryBoundariesRequest expectedQueryBoundariesRequest = new QueryBoundariesRequest(new Coordinates(33, 66), new Coordinates(44, 88));
 
-		QueryBoundariesRequest actualQueryBoundariesRequest = JacksonUtil
-				.convertFromJson(JacksonUtil
-						.serializeToJson(expectedQueryBoundariesRequest),
-						QueryBoundariesRequest.class);
+		QueryBoundariesRequest actualQueryBoundariesRequest = JacksonUtil.convertFromJson(
+				JacksonUtil.serializeToJson(expectedQueryBoundariesRequest), QueryBoundariesRequest.class);
 
-		assertThat(expectedQueryBoundariesRequest,
-				is(actualQueryBoundariesRequest));
+		assertThat(expectedQueryBoundariesRequest, is(actualQueryBoundariesRequest));
 
 	}
 }

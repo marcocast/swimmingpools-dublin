@@ -17,10 +17,8 @@ public class ConfigureModuleServiceTest {
 
 	@Test
 	public void testconfigure() {
-		assertThat(configureModuleService.configure().getHost(),
-				is("https://"+System.getProperty("appname")+".herokuapp.com:"));
-		assertThat(configureModuleService.configure().getModule(),
-				is(Main.GEOSERVICES_MODULE));
+		assertThat(configureModuleService.configure().getHost(), is("https://" + System.getProperty("appname") + ".herokuapp.com:"));
+		assertThat(configureModuleService.configure().getModule(), is(Main.GEOSERVICES_MODULE));
 		assertThat(configureModuleService.configure().getPort(), is(8080));
 	}
 }
