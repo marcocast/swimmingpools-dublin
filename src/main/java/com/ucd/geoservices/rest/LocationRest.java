@@ -29,7 +29,7 @@ public class LocationRest {
 
 	@GET
 	@Produces("text/plain")
-	@Path("/infoooo")
+	@Path("/info")
 	public Response info() {
 		return Response.ok("Some info here").build();
 	}
