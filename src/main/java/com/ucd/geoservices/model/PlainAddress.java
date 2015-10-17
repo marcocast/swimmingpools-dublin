@@ -54,6 +54,4 @@ public class PlainAddress {
 		return country + " " + city + " " + street + " " + number;
 	}
 
-	
-
 }

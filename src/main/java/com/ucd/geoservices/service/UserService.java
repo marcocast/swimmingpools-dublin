@@ -34,8 +34,7 @@ public class UserService {
 	}
 
 	public User getUser(HttpServletRequest request) {
-		return authManager
-				.getUser(request.getSession().getAttribute("account"));
+		return authManager.getUser(request.getSession().getAttribute("account"));
 	}
 
 	public void deleteUser(HttpServletRequest request) {

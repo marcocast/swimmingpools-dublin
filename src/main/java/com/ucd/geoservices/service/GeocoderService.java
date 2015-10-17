@@ -19,18 +19,15 @@ public class GeocoderService {
 		Optional<Pair<Double, Double>> longLat = Optional.empty();
 
 		final Geocoder geocoder = new Geocoder();
-		GeocoderRequest geocoderRequest = new GeocoderRequestBuilder()
-				.setAddress(fullAddress.replaceAll(" ", "+")).setLanguage("en")
+		GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(fullAddress.replaceAll(" ", "+")).setLanguage("en")
 				.getGeocoderRequest();
 		GeocodeResponse geocoderResponse;
 		try {
 			geocoderResponse = geocoder.geocode(geocoderRequest);
 
-			double longitude = geocoderResponse.getResults().get(0)
-					.getGeometry().getLocation().getLng().doubleValue();
+			double longitude = geocoderResponse.getResults().get(0).getGeometry().getLocation().getLng().doubleValue();
 
-			double latitudine = geocoderResponse.getResults().get(0)
-					.getGeometry().getLocation().getLat().doubleValue();
+			double latitudine = geocoderResponse.getResults().get(0).getGeometry().getLocation().getLat().doubleValue();
 
 			longLat = longLat.of(new Pair(longitude, latitudine));
 		} catch (IOException e) {

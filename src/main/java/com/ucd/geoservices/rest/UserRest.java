@@ -33,13 +33,10 @@ public class UserRest {
 	@Path("create")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createUser(@Context HttpHeaders header,
-			@Context HttpServletResponse response,
-			final String userCreateRequest) {
+	public Response createUser(@Context HttpHeaders header, @Context HttpServletResponse response, final String userCreateRequest) {
 		User user = JacksonUtil.convertFromJson(userCreateRequest, User.class);
 		userService.create(user);
-		String refreshToken = userService.getRefreshToken(user.getEmail(),
-				user.getPassword());
+		String refreshToken = userService.getRefreshToken(user.getEmail(), user.getPassword());
 		response.setHeader("refresh_token", refreshToken);
 		return accesstoken(refreshToken);
 	}
@@ -47,8 +44,7 @@ public class UserRest {
 	@GET
 	@Path("login")
 	@Produces("application/json")
-	public Response login(@HeaderParam("authorization") String auth,
-			@Context HttpServletResponse response) {
+	public Response login(@HeaderParam("authorization") String auth, @Context HttpServletResponse response) {
 		String refreshToken = userService.getRefreshToken(auth);
 		response.setHeader("refresh_token", refreshToken);
 		return accesstoken(refreshToken);
@@ -65,8 +61,7 @@ public class UserRest {
 	@GET
 	@Path("accesstoken")
 	@Produces("application/json")
-	public Response accesstoken(
-			@HeaderParam("refresh_token") String refreshToken) {
+	public Response accesstoken(@HeaderParam("refresh_token") String refreshToken) {
 		return Response.ok(userService.getAccessToken(refreshToken)).build();
 	}
 

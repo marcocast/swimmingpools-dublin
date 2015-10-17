@@ -35,8 +35,7 @@ public class StormpathAuth implements AuthManager {
 	private final StormpathProvider stormpathProvider;
 
 	@Autowired
-	public StormpathAuth(UserTransformer userTransformer,
-			StormpathProvider stormpathProvider) {
+	public StormpathAuth(UserTransformer userTransformer, StormpathProvider stormpathProvider) {
 		this.userTransformer = userTransformer;
 		this.stormpathProvider = stormpathProvider;
 
@@ -44,8 +43,7 @@ public class StormpathAuth implements AuthManager {
 
 	@Override
 	public User create(User user) {
-		Account account = stormpathProvider.getClient().instantiate(
-				Account.class);
+		Account account = stormpathProvider.getClient().instantiate(Account.class);
 
 		// Set the account properties
 		account.setGivenName(user.getUsername());
@@ -65,10 +63,8 @@ public class StormpathAuth implements AuthManager {
 	public String getRefreshToken(String email, String password) {
 		String securityToken = "";
 		try {
-			AuthenticationRequest authReq = new UsernamePasswordRequest(email,
-					password);
-			Account account = stormpathProvider.getApplication()
-					.authenticateAccount(authReq).getAccount();
+			AuthenticationRequest authReq = new UsernamePasswordRequest(email, password);
+			Account account = stormpathProvider.getApplication().authenticateAccount(authReq).getAccount();
 
 			// create a new api key and set it store it in a cookie
 			ApiKey apiKey = account.createApiKey();
@@ -76,8 +72,7 @@ public class StormpathAuth implements AuthManager {
 
 			securityToken = Base64.encodeBase64String(concat.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			throw new WebApplicationException("Invalid email or password.",
-					Status.UNAUTHORIZED);
+			throw new WebApplicationException("Invalid email or password.", Status.UNAUTHORIZED);
 		}
 
 		return securityToken;
@@ -88,18 +83,14 @@ public class StormpathAuth implements AuthManager {
 	public String generateAccessToken(String apiKeyToken) {
 		// Set up HTTP Headers
 		Map<String, String[]> headers = Maps.newHashMap();
-		headers.put(HttpHeaders.AUTHORIZATION, new String[] { "Basic "
-				+ apiKeyToken });
-		headers.put(HttpHeaders.CONTENT_TYPE,
-				new String[] { "application/x-www-form-urlencoded" });
+		headers.put(HttpHeaders.AUTHORIZATION, new String[] { "Basic " + apiKeyToken });
+		headers.put(HttpHeaders.CONTENT_TYPE, new String[] { "application/x-www-form-urlencoded" });
 		headers.put(HttpHeaders.ACCEPT, new String[] { "application/json" });
 		String[] param = { "client_credentials" };
 		Map<String, String[]> params = Maps.newHashMap();
 		params.put("grant_type", param);
-		HttpRequest requestCustom = HttpRequests.method(HttpMethod.POST)
-				.headers(headers).parameters(params).build();
-		AccessTokenResult resultToken = (AccessTokenResult) stormpathProvider
-				.getApplication().authenticateOauthRequest(requestCustom)
+		HttpRequest requestCustom = HttpRequests.method(HttpMethod.POST).headers(headers).parameters(params).build();
+		AccessTokenResult resultToken = (AccessTokenResult) stormpathProvider.getApplication().authenticateOauthRequest(requestCustom)
 				.withTtl(60 * 15).execute();
 		return resultToken.getTokenResponse().toJson();
 	}
@@ -107,13 +98,11 @@ public class StormpathAuth implements AuthManager {
 	@Override
 	public void authenticateRequest(HttpServletRequest request) {
 		try {
-			ApiAuthenticationResult result = stormpathProvider.getApplication()
-					.authenticateApiRequest(request);
+			ApiAuthenticationResult result = stormpathProvider.getApplication().authenticateApiRequest(request);
 			Account account = result.getAccount();
 			request.getSession().setAttribute("account", account);
 		} catch (ResourceException ex) {
-			throw new WebApplicationException("Invalid token.",
-					Status.UNAUTHORIZED);
+			throw new WebApplicationException("Invalid token.", Status.UNAUTHORIZED);
 		}
 
 	}

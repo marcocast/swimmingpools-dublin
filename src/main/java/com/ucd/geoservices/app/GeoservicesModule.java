@@ -33,8 +33,7 @@ public class GeoservicesModule implements Module {
 
 	@Override
 	public List<Class> getDefaultResources() {
-		List<Class> resources = new ArrayList<Class>(ConfigurableModule
-				.builder().build().getDefaultResources());
+		List<Class> resources = new ArrayList<Class>(ConfigurableModule.builder().build().getDefaultResources());
 		resources.add(MultiPartFeature.class);
 
 		return resources;

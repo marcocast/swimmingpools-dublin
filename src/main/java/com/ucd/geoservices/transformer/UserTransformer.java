@@ -9,7 +9,6 @@ import com.ucd.geoservices.model.User;
 public class UserTransformer {
 
 	public User fromStormpathUser(Account stormpathUser) {
-		return new User(stormpathUser.getEmail(), "",
-				stormpathUser.getUsername(), stormpathUser.getStatus().name());
+		return new User(stormpathUser.getEmail(), "", stormpathUser.getUsername(), stormpathUser.getStatus().name());
 	}
 }

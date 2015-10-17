@@ -31,14 +31,10 @@ public class GeoService {
 	private final GeocoderService geocoderService;
 
 	@Autowired
-	public GeoService(LocationTransformer geoPointTransformer,
-			GeocoderService geocoderService) {
-		String backendlessAppId = Optional.ofNullable(
-				System.getenv("backendless-application-id")).orElse(
+	public GeoService(LocationTransformer geoPointTransformer, GeocoderService geocoderService) {
+		String backendlessAppId = Optional.ofNullable(System.getenv("backendless-application-id")).orElse(
 				System.getProperty("backendless-application-id"));
-		String backendlessSecretId = Optional.ofNullable(
-				System.getenv("backendless-secret-id")).orElse(
-				System.getProperty("backendless-secret-id"));
+		String backendlessSecretId = Optional.ofNullable(System.getenv("backendless-secret-id")).orElse(System.getProperty("backendless-secret-id"));
 		Backendless.initApp(backendlessAppId, backendlessSecretId, "v1");
 		this.geoPointTransformer = geoPointTransformer;
 		this.geocoderService = geocoderService;
@@ -46,16 +42,12 @@ public class GeoService {
 	}
 
 	public Location addLocation(Location location) {
-		QueryRadiusRequest queryRequest = new QueryRadiusRequest(
-				location.getCoordinates(), 5);
-		List<GeoPoint> existingNearbyPoints = getGeoPointsWithRadius(
-				queryRequest.getCentralCoordinates().getLatitude(),
-				queryRequest.getCentralCoordinates().getLongitude(),
-				queryRequest.getRadius());
+		QueryRadiusRequest queryRequest = new QueryRadiusRequest(location.getCoordinates(), 5);
+		List<GeoPoint> existingNearbyPoints = getGeoPointsWithRadius(queryRequest.getCentralCoordinates().getLatitude(), queryRequest
+				.getCentralCoordinates().getLongitude(), queryRequest.getRadius());
 		if (existingNearbyPoints.isEmpty()) {
-			GeoPoint savedGeoPoint = Backendless.Geo.savePoint(location
-					.getCoordinates().getLatitude(), location.getCoordinates()
-					.getLongitude(), location.getMetaData());
+			GeoPoint savedGeoPoint = Backendless.Geo.savePoint(location.getCoordinates().getLatitude(), location.getCoordinates().getLongitude(),
+					location.getMetaData());
 			return location.withId(savedGeoPoint.getObjectId());
 		} else {
 
@@ -65,15 +57,11 @@ public class GeoService {
 	}
 
 	public Location addLocation(PlainAddress plainAddress) {
-		return geocoderService
-				.getLongLat(plainAddress.getFullAddressString())
-				.map(pair -> {
-					Location location = geoPointTransformer
-							.plainAddressToLocation(plainAddress,
-									new Coordinates(pair.getV1(), pair.getV2()));
+		return geocoderService.getLongLat(plainAddress.getFullAddressString()).map(pair -> {
+			Location location = geoPointTransformer.plainAddressToLocation(plainAddress, new Coordinates(pair.getV1(), pair.getV2()));
 
-					return addLocation(location);
-				}).get();
+			return addLocation(location);
+		}).get();
 
 	}
 
@@ -86,70 +74,47 @@ public class GeoService {
 
 	public Set<Location> queryWithRadius(QueryRadiusRequest queryRequest) {
 
-		return getGeoPointsWithRadius(
-				queryRequest.getCentralCoordinates().getLongitude(),
-				queryRequest.getCentralCoordinates().getLatitude(),
-				queryRequest.getRadius())
-				.stream()
-				.map(geoPoint -> geoPointTransformer
-						.geoPointToLocation(geoPoint))
-				.collect(Collectors.toSet());
+		return getGeoPointsWithRadius(queryRequest.getCentralCoordinates().getLongitude(), queryRequest.getCentralCoordinates().getLatitude(),
+				queryRequest.getRadius()).stream().map(geoPoint -> geoPointTransformer.geoPointToLocation(geoPoint)).collect(Collectors.toSet());
 	}
 
-	public Set<Location> queryWithAddressAndRadius(
-			QueryAddressRadiusRequest queryRequest) {
+	public Set<Location> queryWithAddressAndRadius(QueryAddressRadiusRequest queryRequest) {
 
 		return geocoderService
-				.getLongLat(
-						queryRequest.getPlainAddress().getFullAddressString())
+				.getLongLat(queryRequest.getPlainAddress().getFullAddressString())
 				.map(pair -> {
-					return getGeoPointsWithRadius(pair.getV1(), pair.getV2(),
-							queryRequest.getRadius())
-							.stream()
-							.map(geoPoint -> geoPointTransformer
-									.geoPointToLocation(geoPoint))
-							.collect(Collectors.toSet());
+					return getGeoPointsWithRadius(pair.getV1(), pair.getV2(), queryRequest.getRadius()).stream()
+							.map(geoPoint -> geoPointTransformer.geoPointToLocation(geoPoint)).collect(Collectors.toSet());
 
 				}).orElse(Sets.newHashSet());
 
 	}
 
-	public Set<Location> queryWithBoundaries(
-			QueryBoundariesRequest queryRequest) {
+	public Set<Location> queryWithBoundaries(QueryBoundariesRequest queryRequest) {
 
 		BackendlessGeoQuery geoQuery = new BackendlessGeoQuery();
-		GeoPoint topLeft = new GeoPoint(queryRequest.getTopLeftCoordinates()
-				.getLatitude(), queryRequest.getTopLeftCoordinates()
+		GeoPoint topLeft = new GeoPoint(queryRequest.getTopLeftCoordinates().getLatitude(), queryRequest.getTopLeftCoordinates().getLongitude());
+		GeoPoint bottomright = new GeoPoint(queryRequest.getBottomRightCoordinates().getLatitude(), queryRequest.getBottomRightCoordinates()
 				.getLongitude());
-		GeoPoint bottomright = new GeoPoint(queryRequest
-				.getBottomRightCoordinates().getLatitude(), queryRequest
-				.getBottomRightCoordinates().getLongitude());
 		geoQuery.setSearchRectangle(topLeft, bottomright);
-		BackendlessCollection<GeoPoint> points = Backendless.Geo
-				.getPoints(geoQuery);
+		BackendlessCollection<GeoPoint> points = Backendless.Geo.getPoints(geoQuery);
 
 		List<GeoPoint> geoPoints = Lists.newArrayList();
 		while (points.getCurrentPage().size() > 0) {
 			geoPoints.addAll(points.getData());
 			points = points.nextPage();
 		}
-		return geoPoints
-				.stream()
-				.map(geoPoint -> geoPointTransformer
-						.geoPointToLocation(geoPoint))
-				.collect(Collectors.toSet());
+		return geoPoints.stream().map(geoPoint -> geoPointTransformer.geoPointToLocation(geoPoint)).collect(Collectors.toSet());
 	}
 
-	private List<GeoPoint> getGeoPointsWithRadius(double longitude,
-			double latitude, double radius) {
+	private List<GeoPoint> getGeoPointsWithRadius(double longitude, double latitude, double radius) {
 		List<GeoPoint> geoPoints = Lists.newArrayList();
 		BackendlessGeoQuery geoQuery = new BackendlessGeoQuery();
 		geoQuery.setLatitude(latitude);
 		geoQuery.setLongitude(longitude);
 		geoQuery.setRadius(radius);
 		geoQuery.setUnits(Units.METERS);
-		BackendlessCollection<GeoPoint> points = Backendless.Geo
-				.getPoints(geoQuery);
+		BackendlessCollection<GeoPoint> points = Backendless.Geo.getPoints(geoQuery);
 
 		while (points.getCurrentPage().size() > 0) {
 			geoPoints.addAll(points.getData());
